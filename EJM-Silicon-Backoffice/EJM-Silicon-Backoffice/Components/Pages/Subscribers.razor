@@ -1,0 +1,86 @@
+﻿@using EJMSiliconBackoffice.Models
+@using EJMSiliconBackoffice.ViewModels
+
+@page "/subscribers"
+
+<div class="container">
+    <div class="headlines">
+        <h1>Subscribers</h1>
+    </div>
+    <div class="subscriberContainerParent">
+
+        @if (viewModel.Subscribers == null || viewModel.Subscribers.Count() == 0)
+        {
+            <span class="error center">No subscribers found...</span>
+        }
+        @* @if (TempData["ErrorMessage"] != null)
+        {
+            <span class="success center">@TempData["SuccessMessage"]</span>
+        } *@
+
+        <form class="search-container-subscriber">
+            <div class="input">
+                <input id="searchEmail" name="email" placeholder="Serach email" />
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <button type="submit" class="Mybtn btn-theme">Search</button>
+        </form>
+
+        @if (viewModel.Subscribers != null)
+        {
+            <div class="name-box">
+                <div class="subscriberContainerChild">
+                    <label>@viewModel.Subscribers</label>
+                    <button class="Mybtn btn-red" onclick="areYouShure('@viewModel.Subscribers')">Delete</button>
+                </div>
+            </div>
+
+            <div id="areYouShure_@viewModel.Subscribers" class="areYouShureContainer">
+                <p>Are you sure you wish to unsubscribe?</p>
+                <div class="btnContainer">
+                    <form asp-controller="AdminSubscribe" asp-action="Delete" method="post" novalidate>
+                        <input type="hidden" name="email" value="@viewModel.Subscribers" />
+                        <button class="Mybtn btn-theme" type="submit">Yes</button>
+                    </form>
+                    <button class="Mybtn btn-red" onclick="cancel('areYouShure_@viewModel.Subscribers')">Cancel</button>
+                </div>
+            </div>
+        }
+
+
+        @if (viewModel.Subscribers != null)
+        {
+            <div><h2>All Subscribers</h2></div>
+
+            @foreach (var subscriber in viewModel.Subscribers)
+            {
+                <div class="name-box">
+                    <div class="subscriberContainerChild">
+                        <label>@subscriber.Email</label>
+                        <button class="Mybtn btn-red" onclick="areYouShure('@subscriber.Email')">Delete</button>
+                    </div>
+                </div>
+
+                <div id="areYouShure_@subscriber.Email" class="areYouShureContainer">
+                    <p>Are you sure you wish to unsubscribe?</p>
+                    <div class="btnContainer">
+                        <form asp-controller="AdminSubscribe" asp-action="Delete" method="post" novalidate>
+                            <input type="hidden" name="email" value="@subscriber.Email" />
+                            <button class="Mybtn btn-theme" type="submit">Yes</button>
+                        </form>
+                        <button class="Mybtn btn-red" onclick="cancel('areYouShure_@subscriber.Email')">Cancel</button>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+@code {
+    [SupplyParameterFromQuery]
+    public string Message { get; set; } = "";
+
+    [SupplyParameterFromForm]
+    private SubscriberViewModel viewModel { get; set; } = new SubscriberViewModel();
+}

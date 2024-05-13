@@ -14,5 +14,9 @@
   {
     "outputFile": "Components/Components/Footer.razor.css",
     "inputFile": "Components/Components/Footer.razor.scss"
+  },
+  {
+    "outputFile": "Components/Pages/Subscribers.razor.css",
+    "inputFile": "Components/Pages/Subscribers.razor.scss"
   }
 ]
