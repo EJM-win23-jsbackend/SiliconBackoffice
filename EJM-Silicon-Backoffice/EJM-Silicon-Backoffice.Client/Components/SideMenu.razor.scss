@@ -1,0 +1,38 @@
+@media(min-width: 10px) {
+    .menuBarsContainer {
+
+        .fa-bars {
+            font-size: 1.5rem;
+            transition: ease-in-out 120ms;
+
+            &:Active {
+                color: var(--color-gray-600);
+            }
+        }
+
+        .mobilMenu {
+            position: absolute;
+            right: -100%;
+            top: 0;
+            background-color: var(--color-gray-200);
+            height: 100vh;
+            width: 50vw;
+            z-index: 1;
+
+            .sideMenuNav {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        .show {
+            right: 0% !important;
+        }
+    }
+}
+
+@media(min-width: 1320px) {
+    .menuBarsContainer {
+        display: none;
+    }
+}

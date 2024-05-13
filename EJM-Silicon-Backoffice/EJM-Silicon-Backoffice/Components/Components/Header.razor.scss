@@ -1,0 +1,49 @@
+@media(min-width: 10px) {
+    .header {
+        height: 82px;
+        width: 100vw;
+        background-color: var(--color-white);
+        position: relative;
+        overflow: hidden;
+
+        .headerContainer {
+            height: 82px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .menu {
+                display: none;
+
+                .menuLink {
+                    padding: 1rem;
+                }
+            }
+
+            .accountButtons {
+                display: none;
+            }
+        }
+    }
+}
+
+@media(min-width: 1320px) {
+    .header {
+
+        .headerContainer {
+
+            .menu {
+                display: flex;
+            }
+
+            .menuBarsContainer {
+                display: none;
+            }
+
+            .accountButtons {
+                display: flex;
+                gap: 1rem;
+            }
+        }
+    }
+}
