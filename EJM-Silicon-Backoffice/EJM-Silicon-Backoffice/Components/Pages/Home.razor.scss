@@ -1,0 +1,23 @@
+.AdminChoises {
+    text-align: center;
+    display: grid;
+    row-gap: 1rem;
+
+    .a {
+        transition: color ease-in-out 120ms;
+
+        &:hover {
+            color: var(--color-gray-500);
+            text-shadow: 1px 1px 2px var(--color-gray-200);
+        }
+    }
+
+    .h6 {
+        transition: color ease-in-out 120ms;
+
+        &:hover {
+            color: var(--color-gray-500);
+            text-shadow: 1px 1px 2px var(--color-gray-200);
+        }
+    }
+}
