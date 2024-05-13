@@ -10,5 +10,9 @@
   {
     "outputFile": "Components/Components/Header.razor.css",
     "inputFile": "Components/Components/Header.razor.scss"
+  },
+  {
+    "outputFile": "Components/Components/Footer.razor.css",
+    "inputFile": "Components/Components/Footer.razor.scss"
   }
 ]
