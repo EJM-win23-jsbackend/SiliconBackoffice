@@ -1,0 +1,39 @@
+@media(min-width:10px) {
+    .footer {
+        display: block;
+        margin: auto;
+        color: var(--color-gray-600);
+
+        .container {
+            text-align: center;
+            margin-block: 2rem;
+
+            .social-media {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+                margin-bottom: 30px;
+
+                .fa-brands {
+                    text-decoration: none;
+                }
+            }
+            .span {
+                display: none;
+            }
+        }
+    }
+}
+
+@media(min-width:1820px) {
+    .footer {
+        .container {
+            margin-block: 2rem;
+
+            .span {
+                display: contents;
+            }
+        }
+    }
+}
