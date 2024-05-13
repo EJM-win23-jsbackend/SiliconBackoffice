@@ -1,0 +1,20 @@
+﻿<div class="menuBarsContainer">
+    <i id="hamburger" class="fa-solid fa-bars" @onclick="ShowMenu"></i>
+    <div id="menuMobil" class="mobilMenu @(showMenu ? "show" : "")">
+        <nav class="sideMenuNav">
+            <NavLink class="a navLinkLink" href="/">Home</NavLink>
+            <NavLink class="a navLinkLink" href="/courses">Courses</NavLink>
+            <NavLink class="a navLinkLink" href="/users">Users</NavLink>
+            <NavLink class="a navLinkLink" href="/admins">Admin</NavLink>
+        </nav>
+    </div>
+</div>
+
+@code {
+    private bool showMenu = false;
+
+    private void ShowMenu()
+    {
+        showMenu = !showMenu;
+    }
+}

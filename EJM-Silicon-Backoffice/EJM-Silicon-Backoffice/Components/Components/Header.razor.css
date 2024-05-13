@@ -1,0 +1,36 @@
+﻿@media (min-width: 10px) {
+  .header {
+    height: 82px;
+    width: 100vw;
+    background-color: var(--color-white);
+    position: relative;
+    overflow: hidden;
+  }
+  .header .headerContainer {
+    height: 82px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header .headerContainer .menu {
+    display: none;
+  }
+  .header .headerContainer .menu .menuLink {
+    padding: 1rem;
+  }
+  .header .headerContainer .accountButtons {
+    display: none;
+  }
+}
+@media (min-width: 1320px) {
+  .header .headerContainer .menu {
+    display: flex;
+  }
+  .header .headerContainer .menuBarsContainer {
+    display: none;
+  }
+  .header .headerContainer .accountButtons {
+    display: flex;
+    gap: 1rem;
+  }
+}
