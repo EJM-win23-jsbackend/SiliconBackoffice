@@ -23,7 +23,7 @@ namespace EJMSiliconBackoffice.Services
         {
             try
             {
-                var result = await _httpClient.GetAsync("https://ejmsubscribeprovider.azurewebsites.net/api/GetSubscribers?code=O-mRH9UP4Lf5TT2U6LNx_GloqRAVfMSY60k26bc2fe0MAzFuMURnAg==");
+                var result = await _httpClient.GetAsync(Environment.GetEnvironmentVariable("GetSubscribers"));
 
                 if (result.IsSuccessStatusCode)
                 {
@@ -58,7 +58,7 @@ namespace EJMSiliconBackoffice.Services
                 var request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri("https://ejmsubscribeprovider.azurewebsites.net/api/GetSubscribers?code=O-mRH9UP4Lf5TT2U6LNx_GloqRAVfMSY60k26bc2fe0MAzFuMURnAg=="),
+                    RequestUri = new Uri(Environment.GetEnvironmentVariable("GetSubscribers")),
                     Content = new StringContent(jsonEntity, Encoding.UTF8, "application/json")
                 };
 
@@ -97,7 +97,7 @@ namespace EJMSiliconBackoffice.Services
                 {
                     var emailToUnsubscribe = new UnsubscribeRequest { Email = email };
 
-                    var result = await _httpClient.PostAsJsonAsync("https://ejmsubscribeprovider.azurewebsites.net/api/Unsubscribe?code=Oa0kePVX1HtNVVfOtiXGTnOYiJpT5NtnDbtoinkQH5VyAzFuvjXApg==", emailToUnsubscribe);
+                    var result = await _httpClient.PostAsJsonAsync(Environment.GetEnvironmentVariable("UnSubscribe"), emailToUnsubscribe);
 
                     if(result.IsSuccessStatusCode)
                     {
@@ -127,7 +127,7 @@ namespace EJMSiliconBackoffice.Services
             {
                 if (entity != null)
                 {
-                    var result = await _httpClient.PostAsJsonAsync("https://ejmsubscribeprovider.azurewebsites.net/api/Subscribe?code=F_KK-lDujp84D3bdAFC78K2VA437pwh0DCAqQcTycMTlAzFuLGsCMg==", entity);
+                    var result = await _httpClient.PostAsJsonAsync(Environment.GetEnvironmentVariable("Subscribe"), entity);
 
                     if (result.IsSuccessStatusCode)
                     {
