@@ -18,5 +18,9 @@
   {
     "outputFile": "Components/Pages/Subscribers.razor.css",
     "inputFile": "Components/Pages/Subscribers.razor.scss"
+  },
+  {
+    "outputFile": "Components/Pages/SubscribeEdit.razor.css",
+    "inputFile": "Components/Pages/SubscribeEdit.razor.scss"
   }
 ]

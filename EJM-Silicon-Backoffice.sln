@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EJM-Silicon-Backoffice", "E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EJM-Silicon-Backoffice.Client", "EJM-Silicon-Backoffice\EJM-Silicon-Backoffice.Client\EJM-Silicon-Backoffice.Client.csproj", "{8AFF2257-D643-40F1-8E04-B0330B4D6CD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{2BD8861E-E67E-4F35-8564-C66B6E21BB50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{2BD8861E-E67E-4F35-8564-C66B6E21BB50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

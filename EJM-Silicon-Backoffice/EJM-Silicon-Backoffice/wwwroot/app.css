@@ -142,24 +142,26 @@
   color: var(--color-white);
 }
 
+/*
 .input {
-  outline: none;
-  border: solid var(--color-gray-300) 2px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 0.4rem;
-  padding: 0.5rem;
-  margin-top: 0.3rem;
-  width: 100%;
-}
-.input.input-validation-error {
-  border-color: #EDDADB;
-}
-.input.input-validation-error::placeholder {
-  color: #EDC7C8;
-}
+    outline: none;
+    border: solid var(--color-gray-300) 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0.4rem;
+    padding: 0.5rem;
+    margin-top: 0.3rem;
+    width: 100%;
 
+    &.input-validation-error {
+        border-color: #EDDADB;
+
+        &::placeholder {
+            color: #EDC7C8;
+        }
+    }
+}*/
 .input {
   border: solid var(--color-gray-300) 2px;
   border-radius: 0.4rem;
