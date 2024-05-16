@@ -23,7 +23,7 @@ namespace EJMSiliconBackoffice.Services
         {
             try
             {
-                var result = await _httpClient.GetAsync(Environment.GetEnvironmentVariable("GetSubscribers"));
+                var result = await _httpClient.GetAsync(_configuration.GetConnectionString("GetSubscribers"));
 
                 if (result.IsSuccessStatusCode)
                 {
@@ -58,7 +58,7 @@ namespace EJMSiliconBackoffice.Services
                 var request = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(Environment.GetEnvironmentVariable("GetSubscribers")),
+                    RequestUri = new Uri(_configuration.GetConnectionString("GetSubscribers")),
                     Content = new StringContent(jsonEntity, Encoding.UTF8, "application/json")
                 };
 
@@ -89,15 +89,13 @@ namespace EJMSiliconBackoffice.Services
             }
         }
 
-        public async Task<IActionResult> DeleteSubscriberAsync(string email)
+        public async Task<IActionResult> DeleteSubscriberAsync(SubscriberEntity subscriber)
         {
             try
             {
-                if(email != null)
+                if(subscriber != null)
                 {
-                    var emailToUnsubscribe = new UnsubscribeRequest { Email = email };
-
-                    var result = await _httpClient.PostAsJsonAsync(Environment.GetEnvironmentVariable("UnSubscribe"), emailToUnsubscribe);
+                    var result = await _httpClient.PostAsJsonAsync(_configuration.GetConnectionString("UnSubscribe"), subscriber);
 
                     if(result.IsSuccessStatusCode)
                     {
@@ -127,7 +125,7 @@ namespace EJMSiliconBackoffice.Services
             {
                 if (entity != null)
                 {
-                    var result = await _httpClient.PostAsJsonAsync(Environment.GetEnvironmentVariable("Subscribe"), entity);
+                    var result = await _httpClient.PostAsJsonAsync(_configuration.GetConnectionString("Subscribe"), entity);
 
                     if (result.IsSuccessStatusCode)
                     {

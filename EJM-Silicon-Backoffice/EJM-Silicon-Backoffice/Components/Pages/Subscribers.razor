@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Mvc
 @using System.Diagnostics
 @inject NavigationManager navigationManager
+@rendermode InteractiveServer
 
 
 
@@ -52,7 +53,7 @@
                                 Edit
                             </NavLink>
 
-                            <button class="Mybtn btn-red" @onclick="@(() => DeleteASubscriber(subscriber.Email))">Delete</button>
+                            <button class="Mybtn btn-red" @onclick="@(() => DeleteASubscriber(subscriber))">Delete</button>
 
                         </div>
                     </div>
@@ -136,33 +137,32 @@
         }
     }
 
-    private async Task DeleteASubscriber(string email)
+    private async Task DeleteASubscriber(SubscriberEntity subscriber)
     {
         try
         {
-            var result = await _subscribeServices.DeleteSubscriberAsync(email);
+            var result = await _subscribeServices.DeleteSubscriberAsync(subscriber);
 
             if (result is OkObjectResult okObjectResult)
             {
                 var responseObject = okObjectResult.Value as dynamic;
                 var message = responseObject.Message;
 
-                iactionMessage = new Messages { Message = message };
+                Message = message;
             }
             else if (result is UnauthorizedObjectResult unauthorizedObjectResult)
             {
                 var responseObject = unauthorizedObjectResult.Value as dynamic;
                 var message = responseObject.Message;
 
-                iactionMessage = new Messages { Message = message };
+                Message = message;
             }
-            // Om resultatet är en NotFoundObjectResult
             else if (result is NotFoundObjectResult notFoundObjectResult)
             {
                 var responseObject = notFoundObjectResult.Value as dynamic;
                 var message = responseObject.Message;
 
-                iactionMessage = new Messages { Message = message };
+                Message = message;
             }
             else
             {
