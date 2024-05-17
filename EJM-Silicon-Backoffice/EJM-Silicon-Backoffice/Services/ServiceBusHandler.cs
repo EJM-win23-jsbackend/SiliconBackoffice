@@ -26,10 +26,9 @@ namespace EJMSiliconBackoffice.Services
 
         public async Task NotifyUserDeletionAsync(string userEmail)
         {
-            var messageBody = $"You're no longer up for subscription. The {userEmail} has been deleted from database.";
-            var message = new ServiceBusMessage(Encoding.UTF8.GetBytes(messageBody));
+            var message = new ServiceBusMessage(Encoding.UTF8.GetBytes(userEmail));
             await _sender.SendMessageAsync(message);
-            Console.WriteLine($"Sent message: {messageBody}");
+            Console.WriteLine($"Sent message: {userEmail}");
         }
 
         private async Task ErrorHandler(ProcessErrorEventArgs args)
