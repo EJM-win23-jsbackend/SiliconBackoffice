@@ -1,0 +1,189 @@
+﻿@using EJMSiliconBackoffice.Models
+@using EJMSiliconBackoffice.Services
+@using EJMSiliconBackoffice.ViewModels
+@using Infrastructure.Entities
+@using Microsoft.AspNetCore.Mvc
+@using System.Diagnostics
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+
+
+@page "/subscribers"
+
+<div class="container">
+    <div class="headlines">
+        <h1>Handle Subscribers</h1>
+    </div>
+    <div class="subscriberContainerParent">
+
+        @if (!string.IsNullOrEmpty(Message))
+        {
+            <span class="success center">@Message</span>
+        }
+
+        <EditForm Model="Email" OnValidSubmit="HandleSearch" FormName="Search">
+            <div class="SearchFormContainer">
+                <div class="input">
+                    <InputText id="searchEmail" @bind-Value="Email" placeholder="Search by email" />
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <button type="submit" class="Mybtn btn-theme">Search</button>
+            </div>
+        </EditForm>
+
+        @if (subscribers == null || subscribers.Count() == 0)
+        {
+            <span class="error center">No subscribers found...</span>
+        }
+        else
+        {
+            <div class="Myh6">Subscribers</div>
+        }
+
+        @if (subscribers != null)
+        {              
+        <div class="subscribersContainer">
+
+            @foreach (var subscriber in subscribers)
+            {
+                <div class="name-box">
+                    <div class="subscriberContainerChild">
+                        <label>@subscriber.Email</label>
+                        <div class="btnContaier">
+
+                            <NavLink class="Mybtn btn-theme" href="@($"subscribers/edit/{subscriber.Id}")">
+                                Edit
+                            </NavLink>
+
+                            <button class="Mybtn btn-red" @onclick="@(() => DeleteASubscriber(subscriber))">Delete</button>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        }
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public string Message { get; set; } = "";
+
+    [SupplyParameterFromForm]
+    public string? Email { get; set; } = "";
+
+    private bool showMessage = true;
+
+    private Messages? iactionMessage;
+
+    private List<SubscriberEntity>? subscribers;
+
+    private SubscriberEntity? subscriber;
+
+    [CascadingParameter]
+    private HttpContext? httpcontext { get; set; }
+
+    [Inject]
+    private IHttpContextAccessor? HttpContextAccessor { get; set; }
+
+    [Inject]
+    private SubscribeServices? _subscribeServices { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllSubscribers();
+    }
+
+    private async Task GetAllSubscribers()
+    {
+        try
+        {
+            subscribers = await _subscribeServices.GetAllSubscriberAsync();
+            var uri = new Uri(navigationManager.Uri);
+            if(uri != null)
+            {
+                var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+
+                if(query != null)
+                {
+                    Message = query.Get("message")!;
+                }
+            }
+            else
+            {
+                Message = null!;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            // Hantera undantaget
+        }
+    }
+
+    private async Task HandleSearch()
+    {
+        try
+        {
+            await GetAllSubscribers();
+
+            var result = subscribers.Where(x => x.Email.StartsWith(Email, StringComparison.OrdinalIgnoreCase));
+
+            if(result != null)
+            {
+                subscribers = result.ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("");
+        }
+    }
+
+    private async Task DeleteASubscriber(SubscriberEntity subscriber)
+    {
+        try
+        {
+            var result = await _subscribeServices.DeleteSubscriberAsync(subscriber);
+
+            if (result is OkObjectResult okObjectResult)
+            {
+                var responseObject = okObjectResult.Value as dynamic;
+                var message = responseObject.Message;
+
+                Message = message;
+            }
+            else if (result is UnauthorizedObjectResult unauthorizedObjectResult)
+            {
+                var responseObject = unauthorizedObjectResult.Value as dynamic;
+                var message = responseObject.Message;
+
+                Message = message;
+            }
+            else if (result is NotFoundObjectResult notFoundObjectResult)
+            {
+                var responseObject = notFoundObjectResult.Value as dynamic;
+                var message = responseObject.Message;
+
+                Message = message;
+            }
+            else
+            {
+
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("Navigating to /subscribers...");
+        }
+        navigationManager.NavigateTo($"/subscribers?message={Uri.EscapeDataString(Message)}", true);
+    }
+
+    private void HideMessage()
+    {
+        showMessage = false;
+    }
+}

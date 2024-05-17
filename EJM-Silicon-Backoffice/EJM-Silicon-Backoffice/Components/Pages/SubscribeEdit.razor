@@ -1,0 +1,88 @@
+﻿@using EJMSiliconBackoffice.Services
+@using Infrastructure.Entities
+@using Microsoft.AspNetCore.Mvc
+
+@rendermode InteractiveServer
+
+@page "/subscribers/edit/{SubscriberId}"
+
+<div class="container center">
+    <EditForm Model="subscriber" OnValidSubmit="SaveChanges">
+        <div class="editEmailForm">
+            <label><strong>Enter new email address</strong></label>
+            <InputText class="input" @bind-Value="subscriber.Email" />
+            <div class="btnContainer">
+                <button class="Mybtn btn-theme" type="submit">Save</button>
+                <NavLink class="Mybtn btn-red" href="/subscribers">Cancel</NavLink>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private SubscriberEntity subscriber { get; set; } = new();
+
+    private string Message { get; set; } = "";
+
+    [Parameter]
+    public string SubscriberId { get; set; }
+
+    [Inject]
+    private IHttpContextAccessor HttpContextAccessor { get; set; }
+
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+
+    [Inject]
+    private SubscribeServices _subscribeServices { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadSubscriber();
+    }
+
+    private async Task LoadSubscriber()
+    {
+        if (!string.IsNullOrEmpty(SubscriberId))
+        {
+            subscriber = await _subscribeServices.GetASubscriberAsync(SubscriberId) ?? new SubscriberEntity();
+        }
+    }
+
+    private async Task SaveChanges()
+    {
+        if (subscriber != null)
+        {
+            var result = await _subscribeServices.CreateUpdateSubscriberAsync(subscriber);
+
+            switch (result)
+            {
+                case OkObjectResult okResult:
+                    var obj = okResult.Value as dynamic;
+                    string message = obj?.Message ?? "Operation Successded"; 
+                    navigationManager.NavigateTo($"/subscribers?message={Uri.EscapeDataString(message)}", true);
+
+                    break;
+                case UnauthorizedObjectResult unauthorizedResult:
+                    var obj2 = unauthorizedResult.Value as dynamic;
+                    Message = obj2?.Message ?? "Operation Successded";
+                    break;
+                case NotFoundObjectResult notFoundResult:
+                    var obj3 = notFoundResult.Value as dynamic;
+                    Message = obj3?.Message ?? "Operation Successded";
+                    break;
+                case BadRequestObjectResult badRequestResult:
+                    var obj4 = badRequestResult.Value as dynamic;
+                    Message = obj4?.Message ?? "Operation Successded";
+                    break;
+                default:
+                    Message = "Something went wrong...";
+                    break;
+            }
+        }
+        else
+        {
+            Console.WriteLine("Subscriber is null.");
+        }
+    }
+}

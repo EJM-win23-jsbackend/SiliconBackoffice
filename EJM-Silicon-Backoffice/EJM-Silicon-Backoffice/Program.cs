@@ -1,6 +1,8 @@
+using Data.Contexts;
 using EJM_Silicon_Backoffice.Components;
 using EJM_Silicon_Backoffice.Components.Account;
 using EJM_Silicon_Backoffice.Data;
+using EJMSiliconBackoffice.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,19 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
+builder.Services.AddHttpClient<DataContext>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<SubscribeServices>();
+
+builder.Services.AddTransient<ServiceBusHandler>(x =>
+{
+    var configuration = x.GetRequiredService<IConfiguration>();
+    var connectionString = configuration["ServiceBus:ConnectionString"];
+    var publishQueueName = configuration["ServiceBus:SubscribePublishQueue"];
+    var subscribeQueueName = configuration["ServiceBus:UnsubscribeQueue"];
+
+    return new ServiceBusHandler(connectionString, publishQueueName, subscribeQueueName);
+});
 
 builder.Services.AddAuthentication(options =>
     {
@@ -24,7 +39,7 @@ builder.Services.AddAuthentication(options =>
     })
     .AddIdentityCookies();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("GetSubscribers") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
