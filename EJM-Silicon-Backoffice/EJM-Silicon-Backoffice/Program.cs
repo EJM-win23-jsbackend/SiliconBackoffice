@@ -22,6 +22,16 @@ builder.Services.AddHttpClient<DataContext>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<SubscribeServices>();
 
+builder.Services.AddTransient<ServiceBusHandler>(x =>
+{
+    var configuration = x.GetRequiredService<IConfiguration>();
+    var connectionString = configuration["ServiceBus:ConnectionString"];
+    var publishQueueName = configuration["ServiceBus:SubscribePublishQueue"];
+    var subscribeQueueName = configuration["ServiceBus:UnsubscribeQueue"];
+
+    return new ServiceBusHandler(connectionString, publishQueueName, subscribeQueueName);
+});
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = IdentityConstants.ApplicationScheme;

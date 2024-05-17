@@ -3,10 +3,28 @@ html, body {
     background-color: var(--color-white);
 }
 
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out forwards;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 .wrapper {
     height: 100vh;
     display: grid;
     grid-template-rows: auto 1fr auto;
+    opacity: 0;
 }
 
 .center {

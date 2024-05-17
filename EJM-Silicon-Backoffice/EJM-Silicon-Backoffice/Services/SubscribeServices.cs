@@ -4,6 +4,7 @@ using Infrastructure.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Net.WebSockets;
 using System.Text;
 
 namespace EJMSiliconBackoffice.Services
@@ -12,11 +13,13 @@ namespace EJMSiliconBackoffice.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
+        private readonly ServiceBusHandler _serviceBusHandler;
 
-        public SubscribeServices(HttpClient httpClient, IConfiguration configuration)
+        public SubscribeServices(HttpClient httpClient, IConfiguration configuration, ServiceBusHandler serviceBusHandler)
         {
             _httpClient = httpClient;
             _configuration = configuration;
+            _serviceBusHandler = serviceBusHandler;
         }
 
         public async Task<List<SubscriberEntity>> GetAllSubscriberAsync()
@@ -99,6 +102,8 @@ namespace EJMSiliconBackoffice.Services
 
                     if(result.IsSuccessStatusCode)
                     {
+                        await _serviceBusHandler.NotifyUserDeletionAsync(subscriber.Email);
+
                         return new OkObjectResult(new { Status = 200, Message = "Email was successfully removed from subscription"});
                     }
                     if(result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -129,6 +134,8 @@ namespace EJMSiliconBackoffice.Services
 
                     if (result.IsSuccessStatusCode)
                     {
+                        //var confirmationEmail = await _httpClient.PostAsJsonAsync(_configuration.GetConnectionString(""), confirmationEmail);
+
                         return new OkObjectResult(new { Status = 200, Message = "Email was successfully updated" });
                     }
                     if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
