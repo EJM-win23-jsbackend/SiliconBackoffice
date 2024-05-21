@@ -78,7 +78,7 @@
                         }
                     </div>
                     <div class="text-container">
-                        <NavLink class="a-title" href="#" asp-route-courseId="@course.Id"><h5 class="h5">@course.Title</h5></NavLink>
+                        <NavLink class="a-title" href="@($"course_details/{course.Id}")"><h5 class="h5">@course.Title</h5></NavLink>
                         <p class="p">By @course.Author</p>
                         <div class="price-container">
                             <h6 class="@(course.DiscountPrice != null ? "red" : "price")">$@course.Price</h6>

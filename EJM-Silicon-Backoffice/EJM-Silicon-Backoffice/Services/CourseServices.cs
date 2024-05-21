@@ -1,8 +1,10 @@
 ﻿using Data.Contexts;
 using Data.Entities;
 using Infrastructure.Entities;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace EJMSiliconBackoffice.Services
 {
@@ -59,5 +61,28 @@ namespace EJMSiliconBackoffice.Services
                 return null!;
             }
         }
+
+        public CourseEntity GetACourseAsync(int id)
+        {
+            try
+            {
+                var result = _context.Courses.FirstOrDefault(x => x.Id == id);
+    
+            if (result != null)
+            {
+                {
+                    return result;
+                }
+            }
+                return null!;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("GetACourseAsync::" + ex.Message);
+                return null!;
+            }
+        }
     }
+
+
 }
