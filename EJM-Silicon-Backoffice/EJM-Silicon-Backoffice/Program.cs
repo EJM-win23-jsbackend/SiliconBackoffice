@@ -21,6 +21,9 @@ builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAu
 builder.Services.AddHttpClient<DataContext>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<SubscribeServices>();
+builder.Services.AddScoped<CourseServices>();
+
+builder.Services.AddDbContext<CourseContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("LocalSqlServer")));
 
 builder.Services.AddTransient<ServiceBusHandler>(x =>
 {

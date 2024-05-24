@@ -22,5 +22,13 @@
   {
     "outputFile": "Components/Pages/SubscribeEdit.razor.css",
     "inputFile": "Components/Pages/SubscribeEdit.razor.scss"
+  },
+  {
+    "outputFile": "Components/Pages/Courses.razor.css",
+    "inputFile": "Components/Pages/Courses.razor.scss"
+  },
+  {
+    "outputFile": "Components/Pages/CourseDetails.razor.css",
+    "inputFile": "Components/Pages/CourseDetails.razor.scss"
   }
 ]
