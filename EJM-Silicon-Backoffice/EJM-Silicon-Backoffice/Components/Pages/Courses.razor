@@ -2,6 +2,7 @@
 @using EJMSiliconBackoffice.ViewModels
 @using global::Data.Entities
 @inject CourseServices _services
+@inject HttpClient Http
 
 @page "/courses"
 
@@ -165,8 +166,33 @@
 </section>
 
 @code {
-    private CourseViewModel? Model;
 
+
+    // private List<CourseCardModel>? Model;
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     var query = new GraphQLQuery { Query = "{ getAllCourses { id title isBestseller title likesInProcent likesInNumbers hours authors { name } prices { currency price discount } }}" };
+    //     var response = Http.PostAsJsonAsync("", query);
+
+    //     if(response.IsSuccessFull)
+    //     {
+    //         var result = await response.Content.ReadFromJsonAsync<DynamicGraphQLResponse>();
+    //         Model = result?.Data.GetProperty("getAllCourses").EnumerateArry()
+    //         .Select(course => new CourseCardModel
+    //             {
+    //                 Id = course.GetProperty("id").GetString(),
+    //                 Title = course.GetProperty("title").GetString(),
+    //                 IsBestseller = course.GetProperty("isBestseller").GetBoolean(),
+    //                 LikesInProcent = course.GetProperty("likesInProcent").GetString(),
+    //                 LikesInNumbers = course.GetProperty("likesInNumbers").GetString(),
+    //                 Hours = course.GetProperty("hours").GetString(),
+    //                 Author =string.Concat(course.GetProperty("authors")[0].GetProperty("name").GetString()),
+    //                 Prices = course.GetProperty("prices").EnumerateArray().Select(p => new Price { Currency = p.GetProperty("currency").GetString(), PriceAmount = p.GetProperty("price").GetDouble(), Discount = p.GetProperty("discount").GetDouble() }).ToList()
+    //             }).ToList();
+    //     }
+    // }
+    private CourseViewModel? Model { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
