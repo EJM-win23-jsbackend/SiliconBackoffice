@@ -1,0 +1,156 @@
+﻿@page "/courses/addcourse"
+@using Microsoft.AspNetCore.Authorization
+@using EJMSiliconBackoffice.Models
+@using System.Text.Json
+
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+@* @attribute [Authorize] *@
+
+<form @onsubmit="AddCourseAsync">
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" class="form-course" id="title" @bind="newCourse!.Title" required />
+    </div>
+    <div class="form-group">
+        <label for="author">Author:</label>
+        <input type="text" class="form-course" id="author" @bind="newCourse.Authors![0].Name" />
+    </div>
+    <div class="form-group">
+        <label for="authorImage">Author Image:</label>
+        <input type="text" class="form-course" id="authorImage" @bind="newCourse.Authors[0].AuthorImage" />
+    </div>
+    <div class="form-group">
+        <label for="imageUri">Image URI:</label>
+        <input type="text" class="form-course" id="imageUri" @bind="newCourse.ImageUri" required />
+    </div>
+    <div class="form-group">
+        <label for="imageHeaderUri">Image Header URI:</label>
+        <input type="text" class="form-course" id="imageHeaderUri" @bind="newCourse.ImageHeaderUri" required />
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="isBestSeller" @bind="newCourse.IsBestSeller" />
+        <label class="form-check-label" for="isBestSeller">Is Best Seller</label>
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="isDigital" @bind="newCourse.IsDigital" />
+        <label class="form-check-label" for="isDigital">Is Digital</label>
+    </div>
+    <div class="form-group">
+        <label for="ingress">Ingress:</label>
+        <textarea class="form-course" id="ingress" rows="3" @bind="newCourse.Ingress"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="starRating">Star Rating:</label>
+        <input type="text" class="form-course" id="starRating" @bind="newCourse.StarRating" />
+    </div>
+    <div class="form-group">
+        <label for="reviews">Reviews:</label>
+        <input type="text" class="form-course" id="reviews" @bind="newCourse.Reviews" />
+    </div>
+    <div class="form-group">
+        <label for="likesInProcent">Likes (Percentage):</label>
+        <input type="text" class="form-course" id="likesInProcent" @bind="newCourse.LikesInProcent" />
+    </div>
+    <div class="form-group">
+        <label for="likes">Likes:</label>
+        <input type="text" class="form-course" id="likes" @bind="newCourse.Likes" />
+    </div>
+    <div class="form-group">
+        <label for="hours">Hours:</label>
+        <input type="text" class="form-course" id="hours" @bind="newCourse.Hours" />
+    </div>
+    <div class="form-group">
+        <label for="price">Price:</label>
+        <input type="text" class="form-course" id="price" @bind="newCourse.Prices!.Price" />
+    </div>
+    <div class="form-group">
+        <label for="discount">Discount:</label>
+        <input type="text" class="form-course" id="discount" @bind="newCourse.Prices.Discount" />
+    </div>
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea class="form-course" id="description" rows="3" @bind="newCourse.Content!.Description"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="categories">Categories:</label>
+        <input type="text" class="form-course" id="categories" @bind="newCourse.Categories" />
+        <small class="form-text text-muted">Enter categories separated by commas.</small>
+    </div>
+    <div class="form-group">
+        <label for="learning">Learning:</label>
+        <input type="text" class="form-course" id="learning" @bind="newCourse.Content.Learning" />
+        <small class="form-text text-muted">Enter learning topics separated by commas.</small>
+    </div>
+    <div class="form-group">
+        <label for="includes">Includes:</label>
+        <input type="text" class="form-course" id="includes" @bind="newCourse.Content.Includes" />
+        <small class="form-text text-muted">Enter included items separated by commas.</small>
+    </div>
+    <div class="form-group">
+        <label for="programDetailTitle"> [0] Program Detail Title:</label>
+        <input type="text" class="form-course" id="programDetailTitle" @bind="newCourse.Content.ProgramDetails![0].Title" />
+    </div>
+    <div class="form-group">
+        <label for="programDetailDescription"> [0] Program Detail Description:</label>
+        <textarea class="form-course" id="programDetailDescription" @bind="newCourse.Content.ProgramDetails[0].Description"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="programDetailTitle"> [1] Program Detail Title:</label>
+        <input type="text" class="form-course" id="programDetailTitle" @bind="newCourse.Content.ProgramDetails[1].Title" />
+    </div>
+    <div class="form-group">
+        <label for="programDetailDescription"> [1] Program Detail Description:</label>
+        <textarea class="form-course" id="programDetailDescription" @bind="newCourse.Content.ProgramDetails[1].Description"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="programDetailTitle"> [2] Program Detail Title:</label>
+        <input type="text" class="form-course" id="programDetailTitle" @bind="newCourse.Content.ProgramDetails[2].Title" />
+    </div>
+    <div class="form-group">
+        <label for="programDetailDescription"> [2] Program Detail Description:</label>
+        <textarea class="form-course" id="programDetailDescription" @bind="newCourse.Content.ProgramDetails[2].Description"></textarea>
+    </div>
+
+    <button type="submit" class="btn-addcourse">Add Course</button>
+</form>
+
+@code {
+    private AddAndEditCourseModel newCourse = new AddAndEditCourseModel();
+    // private string errorMessage = "";
+
+    // private async Task AddCourseAsync()
+    // {
+    //     var mutation = $@"
+    //     mutation {{
+    //         addCourse(course: {{
+    //             title: {newCourse.Title},
+    //             ingress: {newCourse.Ingress},
+    //             isDigital: {newCourse.IsDigital},
+    //             isBestSeller: {newCourse.IsBestSeller},
+    //             imageHeaderUri: {newCourse.ImageHeaderUri},
+    //             reviews: {newCourse.Reviews},
+    //             starRating: {newCourse.StarRating},
+    //             likesInProcent: {newCourse.LikesInProcent},
+    //             likes: {newCourse.Likes},
+    //             hours: {newCourse.Hours},
+    //             content: {
+    //                 description: {newCourse.Content!.Description},
+    //                 learning: [{string.Join(",", newCourse.Content.Learning!.Select(x => $"\"{x}\""))}],
+    //                 includes: [{string.Join(",", newCourse.Content.Includes!.Select(x => $"\"{x}\""))}],
+    //                 programDetails: [{string.Join(",", newCourse.Content.ProgramDetails!.Select(pd => $@"{{ title: ""{pd.Title}"", description: ""{pd.Description}"" }}"))}]
+    //             },
+
+    //         }})
+    //     }}
+    // }
+}
+    
+
+
+
+
+
+
+
