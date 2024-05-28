@@ -1,0 +1,182 @@
+﻿@page "/user/edit/{userId}"
+
+@using EJM_Silicon_Backoffice.Data
+@using Microsoft.AspNetCore.Identity
+@using Newtonsoft.Json
+@using System.Text
+@inject HttpClient Http
+@inject UserManager<ApplicationUser> UserManager
+@inject NavigationManager navigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@rendermode InteractiveServer
+
+<div class="container center">
+    
+
+    <EditForm FormName="usereditform" Model="UserAccountForm" OnValidSubmit="SaveUserChanges">
+
+        @if (!string.IsNullOrEmpty(@StatusMessage))
+        {
+            <div class="alert alert-success">
+                @StatusMessage
+            </div>
+        }
+
+        <h1>Edit user information</h1>
+        <div class="showmessage">
+            <button class="Mybtn btn-gray" @onclick="ShowMessage">User Id</button>
+            @if (messageVisible)
+            {
+                @if (isAdmin)
+                {
+                    <p>@userId</p>
+                }
+                else
+                {
+                    <p>You are not authorized to view this!</p>
+                }
+            }
+               
+        </div>
+        
+
+        <div class="account-profileinfo">
+            <div class="personalsettings">
+                <h5>Personal settings:</h5>
+                <div id="form-firstname" class="input-custom">
+                    <label for="FirstName">Firstname</label>
+                    <InputText class="input" @bind-Value="UserAccountForm.FirstName" placeholder="Enter new first name" />
+                </div>
+                <div id="form-lastname" class="input-custom">
+                    <label for="LastName">Lastname</label>
+                    <InputText class="input" @bind-Value="UserAccountForm.LastName" placeholder="Enter new last name" />
+                </div>
+                <div id="form-email" class="input-custom">
+                    <label for="Email">Email</label>
+                    <InputText class="input" @bind-Value="UserAccountForm.Email" placeholder="Enter new email" />
+                </div>
+                <div id="form-phone" class="input-custom">
+                    <label for="Phone">Phonenumber</label>
+                    <InputText class="input" @bind-Value="UserAccountForm.PhoneNumber" placeholder="Enter new phonenumber" />
+                </div>
+            </div>
+            <div class="accountsettings">
+                <h5>Account settings:</h5>
+                <div id="form-username" class="input-custom">
+                    <label for="UserName">User name</label>
+                    <InputText class="input" @bind-Value="UserAccountForm.UserName" placeholder="Enter new user name" />
+                </div>
+                <div id="form-password" class="input-custom">
+                    <label for="Password">Reset password</label>
+                    <InputText class="input" type="password" @bind-Value="@UserAccountForm.NewPassword" placeholder="Enter a new password" />
+                </div>
+            </div>
+        </div>
+        <div class="menu-buttons">
+            <NavLink id="form-btn-gray" class="Mybtn btn-gray" href="/users"><span>Go back</span></NavLink>
+            <button id="form-btn-theme" class="Mybtn btn-theme" type="submit"><span>Save changes</span></button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private bool messageVisible = false;
+    private bool isAdmin = false;
+
+    private ApplicationUser users = new();
+
+    [SupplyParameterFromQuery]
+    public string? StatusMessage { get; set; }
+
+    [SupplyParameterFromForm]
+    private UserAccountModel UserAccountForm { get; set; } = new UserAccountModel();
+
+    [Parameter]
+    public string userId { get; set; } = null!;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if(user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            isAdmin = user.IsInRole("Admin");
+        }
+    }
+
+
+
+    private void ShowMessage()
+    {
+        messageVisible = !messageVisible;
+    }
+
+    private async Task SaveUserChanges()
+    {
+        try
+        {
+            var json = JsonConvert.SerializeObject(UserAccountForm);
+            var request = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await Http.PutAsync($"https://accountprovider-ejm.azurewebsites.net/api/user/{userId}?code=Ng1IiDFS4MAAs1MurXMyX9jt_0o74oonk2lB2OT3DDWfAzFulpuNdA%3D%3D", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                StatusMessage = "User updated successfully";
+
+                // if(!string.IsNullOrEmpty(UserAccountForm.NewPassword))
+                // {
+                //     var user = await UserManager.FindByIdAsync(userId);
+                //     if(user == null)
+                //     {
+                //         StatusMessage = "User was not found";
+                //     }
+                //     else
+                //     {
+                //         var token = await UserManager.GeneratePasswordResetTokenAsync(user);
+                //         var resetPassword = await UserManager.ResetPasswordAsync(user, token, UserAccountForm.NewPassword);
+
+                //         if (resetPassword.Succeeded)
+                //         {
+                //             StatusMessage = "Password changed successfully";
+                //         }
+                //         else
+                //         {
+                //             StatusMessage = "Couldn´t change the password. Please try again";
+                //         }
+                //     }  
+                // } 
+            }
+            else
+            {
+                StatusMessage = "failed to update user. Please try again";
+            }
+        }
+        catch
+        {
+            StatusMessage = "An error occured";
+        }
+
+
+    }
+
+    public class UserAccountModel
+    {
+
+        public string? FirstName { get; set; }
+
+        public string? LastName { get; set; }
+
+        public string? Email { get; set; }
+
+        public string? PhoneNumber { get; set; }
+
+        public string? UserName { get; set; }
+
+        public string? NewPassword { get; set; }
+    }
+}
