@@ -8,73 +8,273 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
+@rendermode InteractiveServer
+
 @* @attribute [Authorize] *@
 
+@if(errorMessage != null)
+{
+    <div>
+        <span class="error">@errorMessage</span>
+    </div>
+}
 <EditForm FormName="AddCourse" Model="newCourse" OnValidSubmit="AddCourseAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
     <div class="form-group">
         <label for="title">Title:</label>
-        <InputText class="form-course" id="title" @bind-Value="newCourse.Title" required />
+        <InputText class="form-course" @bind-Value="newCourse.Title" />
     </div>
 
     <div class="form-group form-check">
-        <InputCheckbox class="form-check-input" id="isBestSeller" @bind-Value="newCourse.IsBestSeller" />
+        <InputCheckbox class="form-check-input" @bind-Value="newCourse.IsBestSeller" />
         <label class="form-check-label" for="isBestSeller">Is Best Seller</label>
     </div>
 
     <div class="form-group form-check">
-        <InputCheckbox class="form-check-input" id="isDigital" @bind-Value="newCourse.IsDigital" />
+        <InputCheckbox class="form-check-input" @bind-Value="newCourse.IsDigital" />
         <label class="form-check-label" for="isDigital">Is Digital</label>
     </div>
 
-    <button type="submit" class="btn-addcourse">Add Course</button>
+    <div class="form-group">
+        <label for="imageUri">Image URI:</label>
+        <InputText class="form-course" id="imageUri" @bind-Value="newCourse.ImageUri" />
+    </div>
+
+    <div class="form-group">
+        <label for="imageHeaderUri">Image Header URI:</label>
+        <InputText class="form-course" id="imageHeaderUri" @bind-Value="newCourse.ImageHeaderUri" />
+    </div>
+
+    <div class="form-group">
+        <label for="starRating">Star Rating:</label>
+        <InputText class="form-course" id="starRating" @bind-Value="newCourse.StarRating" />
+    </div>
+
+    <div class="form-group">
+        <label for="reviews">Reviews:</label>
+        <InputText class="form-course" id="reviews" @bind-Value="newCourse.Reviews" />
+    </div>
+
+    <div class="form-group">
+        <label for="likesInProcent">Likes In Percent:</label>
+        <InputText class="form-course" id="likesInProcent" @bind-Value="newCourse.LikesInProcent" />
+    </div>
+
+    <div class="form-group">
+        <label for="likes">Likes:</label>
+        <InputText class="form-course" id="likes" @bind-Value="newCourse.Likes" />
+    </div>
+
+    <div class="form-group">
+        <label for="hours">Hours:</label>
+        <InputText class="form-course" id="hours" @bind-Value="newCourse.Hours" />
+    </div>
+
+    <div class="form-group">
+        <label for="currency">Currency:</label>
+        <InputText class="form-course" id="currency" @bind-Value="newCourse.Prices.Currency" />
+    </div>
+
+    <div class="form-group">
+        <label for="price">Price:</label>
+        <InputText class="form-course" id="price" @bind-Value="newCourse.Prices.Price" />
+    </div>
+
+    <div class="form-group">
+        <label for="discount">Discount:</label>
+        <InputText class="form-course" id="discount" @bind-Value="newCourse.Prices.Discount" />
+    </div>
+
+@*     <div class="form-group">
+        <label for="categories">Categories:</label>
+        @foreach (var category in categories)
+        {
+            <div class="input-group mb-2">
+                <InputText class="form-control" @bind-Value="categories[categories.IndexOf(category)]" />
+                <button type="button" class="btn btn-danger" @onclick="() => RemoveCategory(category)">Remove</button>
+            </div>
+        }
+        <button type="button" class="btn btn-primary" @onclick="AddCategory">Add Category</button>
+    </div> *@
+
+    <div class="form-group">
+        <label for="authors">Authors:</label>
+        @foreach (var author in newCourse.Authors)
+        {
+            <div>
+                <InputText class="form-course" @bind-Value="author.Name" placeholder="Author Name" />
+                <InputText class="form-course" @bind-Value="author.AuthorImage" placeholder="Author Image URI" />
+            </div>
+        }
+        <button type="button" class="btn btn-primary" @onclick="AddAuthor">Add Author</button>
+    </div>
+
+    <div class="form-group">
+        <label for="programDetails">Program Details:</label>
+        @foreach (var programDetail in newCourse.Content.ProgramDetails)
+        {
+            <div>
+                <InputText class="form-course" @bind-Value="programDetail.Title" placeholder="Program Detail Title" />
+                <InputTextArea class="form-course" @bind-Value="programDetail.Description" placeholder="Program Detail Description" />
+            </div>
+        }
+        <button class="btn btn-primary" type="button" @onclick="AddProgramDetail">Add Program Detail</button>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Add Course</button>
 </EditForm>
 
 @code {
-    private AddAndEditCourseModel newCourse { get; set;} = new AddAndEditCourseModel();  
+    public AddAndEditCourseModel newCourse { get; set;} = new AddAndEditCourseModel
+        {
+            // Authors = new List<Author>(),
+            // Content = new Content
+            // {
+            //     ProgramDetails = new List<ProgramDetailItem>(),
+            //     Learning = new string[0],
+            //     Includes = new string[0]
+            // },
+            // Categories = new string[0]
+        };
+
+    private List<string> categories = new List<string>();
     private string? errorMessage { get; set; }
 
     private async Task AddCourseAsync()
     {
-        var mutation = new
+        if(newCourse.Title != null)
         {
-            query = @"
+            var mutation = new
+            {
+                query = @"
             mutation($course: CourseCreateRequestInput!) {
                 createCourse(input: $course) {
                     title
                     isDigital
                     isBestSeller
-                }
-            }",
-            variables = new
-            {
-                course = new
+                    imageUri
+                    imageHeaderUri
+                    starRating
+                    reviews
+                    likesInProcent 
+                    likes 
+                    hours
+                    authors {
+                        id
+                        name
+                        authorImage
+                    }
+                    prices 
+                    {
+                        currency
+                        price
+                        discount
+                    }
+                    content {
+                        description
+                        programDetails {
+                            id
+                            title
+                            description
+                        }
+                    }
+        }
+    }",
+                variables = new
                 {
-                    title = newCourse.Title,
-                    isDigital = newCourse.IsDigital,
-                    isBestSeller = newCourse.IsBestSeller
+                    course = new
+                    {
+                        title = newCourse?.Title ?? "Default Title",
+                        isDigital = newCourse?.IsDigital ?? false,
+                        isBestSeller = newCourse?.IsBestSeller ?? false,
+                        imageUri = newCourse?.ImageUri ?? string.Empty,
+                        imageHeaderUri = newCourse?.ImageHeaderUri ?? string.Empty,
+                        starRating = newCourse?.StarRating ?? "0",
+                        reviews = newCourse?.Reviews ?? "0",
+                        likesInProcent = newCourse?.LikesInProcent ?? "0%",
+                        likes = newCourse?.Likes ?? "0",
+                        hours = newCourse?.Hours ?? "0",
+                        authors = newCourse?.Authors?.Select(a => new
+                        {
+                            id = a.Id,
+                            name = a.Name ?? "Unknown Author",
+                            authorImage = a.AuthorImage ?? string.Empty
+                        }).ToArray(),
+                        prices = new
+                        {
+                            currency = newCourse?.Prices?.Currency ?? "USD",
+                            price = newCourse?.Prices?.Price ?? "0",
+                            discount = newCourse?.Prices?.Discount ?? "0"
+                        },
+                        content = new
+                        {
+                            description = newCourse?.Content?.Description ?? string.Empty,
+                            programDetails = newCourse?.Content?.ProgramDetails?.Select(pd => new
+                            {
+                                id = pd.Id,
+                                title = pd.Title ?? "No Title",
+                                description = pd.Description ?? "No Description"
+                            }).ToArray()
+                        }
+                    }
+                }
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(mutation), Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await Http.PostAsync("https://courseprovider-ejm.azurewebsites.net/api/graphql?code=WFw9JlFcINQqtM1YeOLUAd6wpm5rJ8i5ajIxp__0mVnUAzFuengWgw%3D%3D", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    NavigationManager.NavigateTo("/courses");
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    errorMessage = $"There was an error adding the course: {errorResponse}";
                 }
             }
-        };
-
-        var content = new StringContent(JsonSerializer.Serialize(mutation), Encoding.UTF8, "application/json");
-
-        try
-        {
-            var response = await Http.PostAsync("https://courseprovider-ejm.azurewebsites.net/api/graphql?code=WFw9JlFcINQqtM1YeOLUAd6wpm5rJ8i5ajIxp__0mVnUAzFuengWgw%3D%3D", content);
-
-            if (response.IsSuccessStatusCode)
+            catch (Exception ex)
             {
-                NavigationManager.NavigateTo("/courses");
-            }
-            else
-            {
-                var errorResponse = await response.Content.ReadAsStringAsync();
-                errorMessage = $"There was an error adding the course: {errorResponse}";
+                errorMessage = $"Exception: {ex.Message}";
             }
         }
-        catch (Exception ex)
-        {
-            errorMessage = $"Exception: {ex.Message}";
-        }
+
+        errorMessage = "Something went wrong...";
+
+    }
+
+    private void AddAuthor()
+    {
+        newCourse.Authors.Add(new Author());
+    }
+
+    private void RemoveAuthor(Author author)
+    {
+        newCourse.Authors.Remove(author);
+    }
+
+    private void AddProgramDetail()
+    {
+        newCourse.Content.ProgramDetails.Add(new ProgramDetailItem());
+    }
+
+    private void RemoveProgramDetail(ProgramDetailItem programDetail)
+    {
+        newCourse.Content.ProgramDetails.Remove(programDetail);
+    }
+
+    private void AddCategory()
+    {
+        categories.Add(string.Empty);
+    }
+
+    private void RemoveCategory(string category)
+    {
+        categories.Remove(category);
     }
 }

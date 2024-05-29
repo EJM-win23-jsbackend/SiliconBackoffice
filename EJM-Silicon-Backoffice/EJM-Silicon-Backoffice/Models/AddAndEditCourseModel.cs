@@ -2,6 +2,14 @@
 {
     public class AddAndEditCourseModel
     {
+        public AddAndEditCourseModel()
+        {
+            Categories = new string[0];
+            Authors = new List<Author>();
+            Prices = new Prices();
+            Content = new Content();
+        }
+
         public string? ImageUri { get; set; }
         public string? ImageHeaderUri { get; set; }
         public bool IsBestSeller { get; set; }
@@ -35,6 +43,12 @@
 
     public class Content
     {
+        public Content()
+        {
+            Learning = new string[0];
+            Includes = new string[0];
+            ProgramDetails = new List<ProgramDetailItem>();
+        }
         public string? Description { get; set; }
         public string[]? Learning { get; set; }
         public string[]? Includes { get; set; }
