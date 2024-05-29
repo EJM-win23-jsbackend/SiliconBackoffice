@@ -16,7 +16,7 @@
 
     <EditForm FormName="usereditform" Model="UserAccountForm" OnValidSubmit="SaveUserChanges">
 
-        @if (!string.IsNullOrEmpty(@StatusMessage))
+        @if (!string.IsNullOrEmpty(StatusMessage))
         {
             <div class="alert alert-success">
                 @StatusMessage
@@ -25,7 +25,7 @@
 
         <h1>Edit user information</h1>
         <div class="showmessage">
-            <button class="Mybtn btn-gray" @onclick="ShowMessage">User Id</button>
+            <button class="Mybtn btn-gray" type="button" @onclick="ShowMessage">User Id</button>
             @if (messageVisible)
             {
                 @if (isAdmin)
@@ -81,13 +81,11 @@
 </div>
 
 @code {
+    private string? StatusMessage { get; set; }
     private bool messageVisible = false;
     private bool isAdmin = false;
 
     private ApplicationUser users = new();
-
-    [SupplyParameterFromQuery]
-    public string? StatusMessage { get; set; }
 
     [SupplyParameterFromForm]
     private UserAccountModel UserAccountForm { get; set; } = new UserAccountModel();
