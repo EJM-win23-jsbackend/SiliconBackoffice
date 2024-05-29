@@ -9,51 +9,55 @@
 
 @* @attribute [Authorize] *@
 
-
-<PageTitle>Courses</PageTitle>
-
 <section class="courses">
-    <div class="container">
-        <a class="add-course" href="/courses/addnewcourse">Add a new course</a>
-        <div class="navigationContainer">
-            <nav class="navigation">
-                <a href="/"><i class="fa-solid fa-house"></i> Home </a>
-                <p> >> </p>
-                <a class="link-active" href="/courses"> Handle Courses </a>
-            </nav>
-        </div>
-        <div class="header">
-            <h1>Courses</h1>
-        </div>
-        <div class="items">
-            @if (courses == null)
+<div class="container">
+    <a class="add-course" href="/courses/addcourse">Add a new course</a>
+    <div class="navigationContainer">
+        <nav class="navigation">
+            <a href="/"><i class="fa-solid fa-house"></i> Home </a>
+            <p> >> </p>
+            <a class="link-active" href="/courses"> Handle Courses </a>
+        </nav>
+    </div>
+    <div class="header">
+        <h1>Courses</h1>
+    </div>
+    <div class="items">
+        @if (courses == null)
+        {
+            <div><i class="fa-sharp fa-solid fa-spinner-third fa-spin"></i></div>
+        }
+        else
+        {
+            @foreach (var item in courses)
             {
-                <div><i class="fa-sharp fa-solid fa-spinner-third fa-spin"></i></div>
-            }
-            else
-            {
-                @foreach (var item in courses)
-                {
-                    var link = $"courses/editcourse/{item.Id}";
-                    <div class="course-wrapper">
-                        <div class="course">
-                            <img class="course-image" src="/images/courses/@item.ImageUri" alt="" />
-                            <div class="content">
-                                <h2>@item.Title</h2>
+                var link = $"courses/editcourse/{item.Id}";
+                <div class="course-wrapper">
+                    <div class="course">
+                        <img class="course-image" src="/images/courses/@item.ImageUri" alt="" />
+                        <div class="content">
+                            <h2>@item.Title</h2>
+                            @if (item.Author != null)
+                            {
                                 <p>By @item.Author</p>
-                                <div class="course-buttons">
-                                    <a class="btn-edit" href="@link">Edit</a>
-                                    <button onclick="@(() => DeleteCourseAsync(item.Id!))" class="btn-del">Delete</button>
-                                </div>
+                            }
+                            else
+                            {
+                                <p>By @item.Author</p>
+                            }
+
+                            <div class="course-buttons">
+                                <a class="btn-edit" href="@link">Edit</a>
+                                <button onclick="@(() => DeleteCourseAsync(item.Id!))" class="btn-del">Delete</button>
                             </div>
                         </div>
                     </div>
-                }
+                </div>
             }
-        </div>
+        }
     </div>
+</div>
 </section>
-
 
 @code {
     private List<CourseModel>? courses;
@@ -69,8 +73,8 @@
             .Select(course => new CourseModel
                 {
                     Id = course.GetProperty("id").GetString(),
-                    ImageUri = course.GetProperty("imageUri").GetString(),
-                    Title = course.GetProperty("title").GetString(),
+                    ImageUri = course.GetProperty("imageUri").GetString() ?? string.Empty,
+                    Title = course.GetProperty("title").GetString() ?? string.Empty,
                     Author = course.GetProperty("authors")[0].GetProperty("name").GetString(), // gets only one author, needs more functionality to get multible authors
                 })
             .ToList();
