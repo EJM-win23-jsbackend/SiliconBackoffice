@@ -1,0 +1,38 @@
+
+.container {
+
+    .showmessage {
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 3rem;
+    }
+
+
+    .account-profileinfo {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+    }
+
+    h1 {
+        padding-top: 2rem;
+    }
+
+    h5 {
+        padding-top: 10px;
+    }
+
+    label {
+        margin-bottom: 8px;
+        margin-top: 10px;
+    }
+
+    .menu-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 4rem;
+        gap: 2rem;
+    }
+}
