@@ -60,8 +60,8 @@ namespace EJMSiliconBackoffice.Services
 
                 var request = new HttpRequestMessage
                 {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri(_configuration.GetConnectionString("GetSubscribers")),
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri(_configuration.GetConnectionString("GetASubscriber")!),
                     Content = new StringContent(jsonEntity, Encoding.UTF8, "application/json")
                 };
 
@@ -73,13 +73,11 @@ namespace EJMSiliconBackoffice.Services
 
                     if (!string.IsNullOrEmpty(body))
                     {
-                        var okResult = JsonConvert.DeserializeObject<OkObjectResult>(body);
+                        var subscriber = JsonConvert.DeserializeObject<SubscriberEntity>(body);
 
-                        if (okResult != null && okResult.Value != null)
+                        if (subscriber != null)
                         {
-                            var json = okResult.Value.ToString();
-                            var entity = JsonConvert.DeserializeObject<SubscriberEntity>(json!);
-                            return entity!;
+                            return subscriber;
                         }
                     }
                 }

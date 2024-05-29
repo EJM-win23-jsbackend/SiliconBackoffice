@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using EJMSiliconBackoffice.Models;
 
 namespace EJMSiliconBackoffice.Models
 {

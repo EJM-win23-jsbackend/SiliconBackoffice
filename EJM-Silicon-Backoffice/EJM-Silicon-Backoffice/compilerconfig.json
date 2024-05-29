@@ -30,5 +30,14 @@
   {
     "outputFile": "Components/Pages/EditUser.razor.css",
     "inputFile": "Components/Pages/EditUser.razor.scss"
+  },
+  {
+    "outputFile": "Components/Pages/Courses.razor.css",
+    "inputFile": "Components/Pages/Courses.razor.scss"
+  },
+  {
+    "outputFile": "Components/Pages/CourseDetails.razor.css",
+    "inputFile": "Components/Pages/CourseDetails.razor.scss"
+
   }
 ]

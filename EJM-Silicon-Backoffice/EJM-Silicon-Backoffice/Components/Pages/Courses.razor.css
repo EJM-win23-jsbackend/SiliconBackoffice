@@ -1,0 +1,86 @@
+﻿@media (min-width: 10px) {
+  .courses {
+    padding-block: 1rem;
+  }
+  .courses .headlineCourses {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .courses .headlineCourses .search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .courses .headlineCourses .search-container .dropdown-toggle {
+    border: 2px solid var(--color-gray-300);
+    border-radius: 0.4rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    min-width: 12rem;
+  }
+  .courses .headlineCourses .search-container .dropdown-item {
+    min-width: 14rem;
+    padding-block: 0.5rem;
+  }
+  .course-container {
+    padding-block: 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .course-container #noCoursesFound {
+    padding: 2rem;
+    text-align: center;
+  }
+  .pagination-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center;
+    margin-top: 1rem;
+    width: 100%;
+    height: auto;
+  }
+  .pagination-container ul .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+@media (min-width: 992px) {
+  #courses .headlineCourses {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  #courses .headlineCourses .search-container {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+  #courses .headlineCourses .search-container .dropdown-item {
+    transition: ease-in-out 120ms;
+  }
+  #courses .headlineCourses .search-container .dropdown-item:hover {
+    background-color: var(--color-gray-300);
+    text-decoration: none;
+  }
+  #courses .headlineCourses .search-container .myDropdown {
+    width: 20rem;
+  }
+  .course-container {
+    grid-template-columns: 1fr 1fr;
+  }
+  .course-container .noCoursesFound {
+    grid-column: 2;
+  }
+}
+@media (min-width: 1320px) {
+  .course-container {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}

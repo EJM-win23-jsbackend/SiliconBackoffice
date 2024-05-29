@@ -28,8 +28,20 @@
         gap: 0.2rem;
         padding: 1rem;
 
-        a {
+        .a-title {
+            text-decoration: none; 
             transition: ease-in-out 120ms;
+
+            .h5 {
+                color: var(--color-gray-900);
+                margin: 0rem;
+                transition: ease-in-out 120ms;
+
+                &:hover {
+                    text-decoration: underline;
+                    color: var(--color-gray-700);
+                }
+            }
 
             &:hover {
                 text-decoration: underline;
@@ -37,44 +49,31 @@
             }
         }
 
-        h5 {
-            color: var(--color-gray-900);
-            margin: 0rem;
-            transition: ease-in-out 120ms;
 
-            &:hover {
-                text-decoration: underline;
-                color: var(--color-gray-700);
-            }
-        }
 
-        p {
+        .p {
             font-size: 0.9rem;
         }
 
         .price-container {
             display: flex;
+            align-items: center;
             gap: 0.5rem;
 
             .price {
                 color: var(--color-theme);
-
-                h6 {
-                    margin: 0;
-                }
+                margin: 0;
             }
 
             .red {
                 color: var(--color-danger);
-
-                h6 {
-                    margin: 0;
-                }
+                margin: 0;
             }
 
             .discount-price {
                 color: var(--color-gray-600);
                 text-decoration: line-through;
+                margin: 0; 
 
                 p {
                     font-size: 1rem;
@@ -95,19 +94,23 @@
                 display: flex;
                 align-items: center;
                 gap: 0.2rem;
+
+                .p {
+                    margin: 0;
+                }
             }
         }
 
         .checkboxBestSeller {
             display: flex;
         }
+    }
 
-        .btnContainer {
-            padding-top: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: end;
-        }
+    .endContainer {
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 }
 

@@ -19,11 +19,12 @@
 .btn-theme {
   background: var(--color-theme);
   color: var(--color-white);
-  border: none;
+  border: 1px solid var(--color-theme);
 }
 .btn-theme:hover {
   text-decoration: none;
   background: var(--color-gray-700);
+  border: 1px solid var(--color-gray-700);
   color: var(--color-white);
 }
 
@@ -32,18 +33,19 @@
   color: var(--color-white);
   padding-top: 10px;
   padding-bottom: 13px;
-  border: none;
+  border: 1px solid var(--color-theme);
 }
 .btn-theme-s:hover {
   text-decoration: none;
   background: var(--color-gray-700);
+  border: 1px solid var(--color-gray-700);
   color: var(--color-white);
 }
 
 .btn-gray {
   background: var(--color-gray-200);
   color: var(--color-gray-800);
-  border: none;
+  border: 1px solid var(--color-gray-200);
 }
 .btn-gray:hover {
   text-decoration: none;
@@ -54,17 +56,18 @@
 .btn-transparent {
   background: var(--color-transparent);
   color: var(--color-gray-800);
-  border: none;
+  border: 1px solid var(--color-transparanet);
 }
 .btn-transparent:hover {
   text-decoration: none;
   background: var(--color-gray-700);
+  border: 1px solid var(--color-gray-700);
   color: var(--color-white);
 }
 
 .btn-red {
   color: var(--color-danger);
-  border: solid var(--color-danger);
+  border: 1px solid var(--color-danger);
   background: transparent;
 }
 .btn-red:hover {
@@ -339,44 +342,43 @@
   gap: 0.2rem;
   padding: 1rem;
 }
-.courses-boxes .text-container a {
+.courses-boxes .text-container .a-title {
+  text-decoration: none;
   transition: ease-in-out 120ms;
 }
-.courses-boxes .text-container a:hover {
-  text-decoration: underline;
-  color: var(--color-gray-700);
-}
-.courses-boxes .text-container h5 {
+.courses-boxes .text-container .a-title .h5 {
   color: var(--color-gray-900);
   margin: 0rem;
   transition: ease-in-out 120ms;
 }
-.courses-boxes .text-container h5:hover {
+.courses-boxes .text-container .a-title .h5:hover {
   text-decoration: underline;
   color: var(--color-gray-700);
 }
-.courses-boxes .text-container p {
+.courses-boxes .text-container .a-title:hover {
+  text-decoration: underline;
+  color: var(--color-gray-700);
+}
+.courses-boxes .text-container .p {
   font-size: 0.9rem;
 }
 .courses-boxes .text-container .price-container {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
 }
 .courses-boxes .text-container .price-container .price {
   color: var(--color-theme);
-}
-.courses-boxes .text-container .price-container .price h6 {
   margin: 0;
 }
 .courses-boxes .text-container .price-container .red {
   color: var(--color-danger);
-}
-.courses-boxes .text-container .price-container .red h6 {
   margin: 0;
 }
 .courses-boxes .text-container .price-container .discount-price {
   color: var(--color-gray-600);
   text-decoration: line-through;
+  margin: 0;
 }
 .courses-boxes .text-container .price-container .discount-price p {
   font-size: 1rem;
@@ -394,14 +396,17 @@
   align-items: center;
   gap: 0.2rem;
 }
+.courses-boxes .text-container .timeAndLikesParent .timeAndLikesChild .p {
+  margin: 0;
+}
 .courses-boxes .text-container .checkboxBestSeller {
   display: flex;
 }
-.courses-boxes .text-container .btnContainer {
-  padding-top: 1rem;
+.courses-boxes .endContainer {
+  padding: 1rem;
   display: flex;
   justify-content: space-between;
-  align-items: end;
+  align-items: center;
 }
 
 @media (min-width: 992px) {
@@ -419,7 +424,7 @@
   width: auto;
   height: 24px;
   padding-inline: 10px;
-  background-color: var(--color-succes);
+  background-color: var(--color-success);
   color: white;
   border-radius: 0.2rem;
 }
@@ -559,6 +564,7 @@
 }
 
 html, body {
+  font-family: font-manrope;
   font-size: 16px;
   background-color: var(--color-white);
 }
