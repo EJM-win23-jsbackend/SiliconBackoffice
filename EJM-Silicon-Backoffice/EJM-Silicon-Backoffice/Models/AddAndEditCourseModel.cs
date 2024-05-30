@@ -1,4 +1,6 @@
-﻿namespace EJMSiliconBackoffice.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EJMSiliconBackoffice.Models
 {
     public class AddAndEditCourseModel
     {
@@ -18,7 +20,10 @@
         public bool IsBestSeller { get; set; }
         public bool IsDigital { get; set; }
         public string[] Categories { get; set; }
-        public string? Title { get; set; }
+        [Required(ErrorMessage = "You must enter a title")]
+        [MaxLength(200)]
+        [Display(Name = "title")]
+        public string Title { get; set; } = null!;
         public string? Ingress { get; set; }
         public string? StarRating { get; set; }
         public string? Reviews { get; set; }
@@ -57,7 +62,6 @@
             Includes = new[] { "Default" };
             ProgramDetails = new List<ProgramDetailItem>(); // Initiera ProgramDetails till en tom lista
         }
-
         public string? Description { get; set; }
         public string[]? Learning { get; set; }
         public string[]? Includes { get; set; }

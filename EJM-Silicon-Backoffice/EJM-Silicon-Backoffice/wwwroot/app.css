@@ -42,6 +42,20 @@
   color: var(--color-white);
 }
 
+.btn-Add {
+  background: var(--color-success);
+  color: var(--color-white);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border: 1px solid var(--color-success);
+}
+.btn-Add:hover {
+  text-decoration: none;
+  background: var(--color-gray-700);
+  border: 1px solid var(--color-gray-700);
+  color: var(--color-white);
+}
+
 .btn-gray {
   background: var(--color-gray-200);
   color: var(--color-gray-800);
@@ -186,6 +200,10 @@
 }
 .input.input-validation-error::placeholder {
   color: #EDC7C8;
+}
+
+.price-input {
+  width: 8rem;
 }
 
 .inputArea {

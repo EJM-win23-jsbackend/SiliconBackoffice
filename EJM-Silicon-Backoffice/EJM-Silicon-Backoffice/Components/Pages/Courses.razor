@@ -75,7 +75,9 @@
                     Id = course.GetProperty("id").GetString(),
                     ImageUri = course.GetProperty("imageUri").GetString() ?? string.Empty,
                     Title = course.GetProperty("title").GetString() ?? string.Empty,
-                    Author = course.GetProperty("authors")[0].GetProperty("name").GetString(), // gets only one author, needs more functionality to get multible authors
+                    Author = (course.GetProperty("authors").ValueKind == JsonValueKind.Array && course.GetProperty("authors").GetArrayLength() > 0)
+                    ? course.GetProperty("authors")[0].GetProperty("name").GetString() ?? "Default Teacher"
+                    : "Default Teacher",
                 })
             .ToList();
         }
