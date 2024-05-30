@@ -1,0 +1,144 @@
+﻿@page "/users"
+
+@using EJM_Silicon_Backoffice.Data
+@using Microsoft.AspNetCore.Identity
+@inject HttpClient Http
+
+@attribute [StreamRendering]
+@rendermode InteractiveServer
+
+
+
+<div class="container">
+    <div class="headlines">
+        <h1>Handle Users</h1>
+    </div>
+    <div class="content">
+        <div class="userContent">
+            @if (users == null)
+            {
+                <div class="spinner-border m-5" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                @if (!string.IsNullOrEmpty(@StatusMessage))
+                {
+                    <div class="alert alert-danger">
+                        @StatusMessage
+                    </div>
+                }
+            }
+            else
+            {
+                <EditForm Model="Email" OnValidSubmit="HandleSearch" FormName="Search">
+                    <div class="SearchFormContainer">
+                        <div class="input">
+                            <InputText id="searchEmail" @bind-Value="Email" placeholder="Search by email" />
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <button type="submit" class="Mybtn btn-theme">Search</button>
+                    </div>
+                </EditForm>
+                if(users.Any())
+                {
+                    @foreach (var user in users)
+                    {
+                        <div class="name-box">
+                            <div class="userContentDisplay">
+                                <label> @user.NormalizedUserName </label>
+                                <div class="btnContaier">
+                                    <NavLink class="Mybtn btn-theme" href="@($"/user/edit/{user.Id}")">Edit</NavLink>
+                                    <button class="Mybtn btn-red" @onclick="() => DeleteUser(user.Id)">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(@StatusMessage))
+                    {
+                        <div class="alert alert-success">
+                            @StatusMessage
+                        </div>
+                    }
+                }               
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@code {
+    private ApplicationUser[]? users;
+    private List<ApplicationUser> user = new List<ApplicationUser>();
+
+    [SupplyParameterFromQuery]
+    public string? StatusMessage { get; set; }
+
+    [SupplyParameterFromForm]
+    public string? Email { get; set; } = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await LoadUsersAsync();
+    }
+
+
+    private async Task <ApplicationUser[]>LoadUsersAsync()
+    {
+        try
+        {
+            var result = await Http.GetFromJsonAsync<ApplicationUser[]>("https://accountprovider-ejm.azurewebsites.net/api/GetUsers?code=Ng1IiDFS4MAAs1MurXMyX9jt_0o74oonk2lB2OT3DDWfAzFulpuNdA%3D%3D");
+            return result ?? Array.Empty<ApplicationUser>();
+        }
+        catch
+        {
+            StatusMessage = "No users was found";
+            return Array.Empty<ApplicationUser>();
+        }
+
+    }
+
+    private async Task HandleSearch()
+    {
+        try
+        {
+            var usersInList = await Http.GetFromJsonAsync<List<ApplicationUser>>("https://accountprovider-ejm.azurewebsites.net/api/GetUsers?code=Ng1IiDFS4MAAs1MurXMyX9jt_0o74oonk2lB2OT3DDWfAzFulpuNdA%3D%3D");
+            var result = usersInList.Where(x => x.Email.StartsWith(Email, StringComparison.OrdinalIgnoreCase));
+            if(result.Any())
+            {
+                users = result.ToArray();
+            }
+            else
+            {
+                StatusMessage = "No user with the same email address was found";
+            }
+
+        }
+        catch
+        {
+            StatusMessage = "An error occured. Please try again!";
+        }
+    }
+
+
+    private async Task DeleteUser(string userId)
+    {
+        try
+        {
+            var result = await Http.DeleteAsync($"https://accountprovider-ejm.azurewebsites.net/api/deleteuser/{userId}?code=Ng1IiDFS4MAAs1MurXMyX9jt_0o74oonk2lB2OT3DDWfAzFulpuNdA%3D%3D");
+            if (result.IsSuccessStatusCode)
+            {
+                users = await LoadUsersAsync();
+                StatusMessage = "User was deleted successfully!";
+            }
+        }
+        catch
+        {
+            StatusMessage = "Failed to delete user";
+            return;
+        }
+        
+    }
+}

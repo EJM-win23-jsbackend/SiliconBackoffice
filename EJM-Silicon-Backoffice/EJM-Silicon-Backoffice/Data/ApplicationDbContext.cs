@@ -5,5 +5,6 @@ namespace EJM_Silicon_Backoffice.Data
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
     {
+        public DbSet<UserAddress> UserAddresses { get; set; }
     }
 }

@@ -24,6 +24,14 @@
     "inputFile": "Components/Pages/SubscribeEdit.razor.scss"
   },
   {
+    "outputFile": "Components/Pages/Users.razor.css",
+    "inputFile": "Components/Pages/Users.razor.scss"
+  },
+  {
+    "outputFile": "Components/Pages/EditUser.razor.css",
+    "inputFile": "Components/Pages/EditUser.razor.scss"
+  },
+  {
     "outputFile": "Components/Pages/Courses.razor.css",
     "inputFile": "Components/Pages/Courses.razor.scss"
   },
