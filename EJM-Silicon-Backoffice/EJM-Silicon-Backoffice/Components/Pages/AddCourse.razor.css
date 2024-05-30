@@ -109,7 +109,6 @@
     padding: 0;
     display: flex;
     align-items: center;
-    list-style: circle;
   }
   .Create-course .addCourse-container .add-includes-container {
     display: flex;
