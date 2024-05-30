@@ -19,10 +19,8 @@ builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
 builder.Services.AddHttpClient<DataContext>();
-builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<SubscribeServices>();
-
-
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<ServiceBusHandler>(x =>
 {
