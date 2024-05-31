@@ -8,7 +8,7 @@ namespace EJMSiliconBackoffice.Models
         {
             if (Categories == null || Categories.Length == 0)
             {
-                Categories = new[] { "Default Category" };
+                Categories = new[] { "Programming" };
             }
             Authors = new List<Author>();
             Prices = new Prices();

@@ -1,6 +1,5 @@
 ﻿//Mobil first
-@media(min-width: 10px) 
-{
+@media(min-width: 10px) {
     .metadata-container {
         display: grid;
         grid-template-columns: 1fr;
@@ -217,10 +216,8 @@
 }
 
 //Desktop
-@media(min-width: 992px) 
-{
-    .metadata-container 
-    {
+@media(min-width: 992px) {
+    .metadata-container {
         width: 100%;
         text-align: left;
 

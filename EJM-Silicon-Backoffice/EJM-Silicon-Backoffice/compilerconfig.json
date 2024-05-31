@@ -42,5 +42,9 @@
   {
     "outputFile": "Components/Pages/AddCourse.razor.css",
     "inputFile": "Components/Pages/AddCourse.razor.scss"
+  },
+  {
+    "outputFile": "Components/Pages/EditCourse.razor.css",
+    "inputFile": "Components/Pages/EditCourse.razor.scss"
   }
 ]
