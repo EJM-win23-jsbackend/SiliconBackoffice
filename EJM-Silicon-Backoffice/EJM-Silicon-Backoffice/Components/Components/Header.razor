@@ -1,4 +1,12 @@
-﻿<header id="header" class="header">
+﻿@using EJM_Silicon_Backoffice.Data
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject NavigationManager NavigationManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+<header id="header" class="header">
     <div class="container">
         <div class="headerContainer">
 
@@ -6,23 +14,54 @@
 
             <div class="menu">
                 <nav>
-                    <NavLink class="a textLinks" href="/">Admin home</NavLink>
-                    <NavLink class="a textLinks" href="/courses">Courses</NavLink>
-                    <NavLink class="a textLinks" href="/users">Users</NavLink>
-                    <NavLink class="a textLinks" href="/subscribers">Subscribers</NavLink>
-                    <NavLink class="a textLinks" href="/admin">Admins</NavLink>
+                    <AuthorizeView Roles="Admin">
+                        <Authorized>
+                            <NavLink class="a textLinks" href="/">Admin home</NavLink>
+                            <NavLink class="a textLinks" href="/courses">Courses</NavLink>
+                            <NavLink class="a textLinks" href="/users">Users</NavLink>
+                            <NavLink class="a textLinks" href="/subscribers">Subscribers</NavLink>
+                            <NavLink class="a textLinks" href="/admin">Admins</NavLink>
+                        </Authorized>
+                    </AuthorizeView>
                 </nav>
             </div>
             
             <SideMenu />
-
             <div class="accountButtons">
-                <NavLink class="Mybtn btn-theme" href="/signin"><i class="fa-regular fa-right-to-bracket"></i><span>Sign In</span></NavLink>
+
+                @if (SignInManager.IsSignedIn(HttpContext.User))
+                {
+                    <form action="Account/Logout" method="post">
+                        <AntiforgeryToken />
+                        <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                        <button class="Mybtn btn-theme" type="submit">
+                            <i class="fa-solid fa-arrow-left-from-bracket"></i><span class="span">Sign Out</span>
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <NavLink class="Mybtn btn-theme" href="/account/login"><i class="fa-regular fa-right-to-bracket"></i><span>Sign In</span></NavLink>
+                }
             </div>
         </div>
     </div>
 </header>
 
 @code {
+    // go back to home page for webapp
+    private string currentUrl = "https://win23jsbackend-ejm.azurewebsites.net/";
 
+    private ApplicationUser? user { get; set; }
+
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        if (SignInManager.IsSignedIn(HttpContext.User))
+        {
+            var user = await UserManager.GetUserAsync(HttpContext.User);
+        }
+    }
 }

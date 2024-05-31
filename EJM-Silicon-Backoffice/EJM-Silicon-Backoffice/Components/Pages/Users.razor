@@ -1,12 +1,13 @@
 ﻿@page "/users"
 
 @using EJM_Silicon_Backoffice.Data
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
 @inject HttpClient Http
 
 @attribute [StreamRendering]
 @rendermode InteractiveServer
-
+@attribute [Authorize(Roles = "Admin")]
 
 
 <div class="container">
