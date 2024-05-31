@@ -27,6 +27,7 @@
                         <div class="add-author-container-child">
                             <InputText class="input" @bind-Value="author.Name" placeholder="Author Name" />
                             <InputText class="input" @bind-Value="author.AuthorImage" placeholder="Author Image URI" />
+                            <button type="button" class="Mybtn btn-red" @onclick="() => RemoveAuthor(author)">Remove Author</button>
                         </div>
                     }
                     <button type="button" class="Mybtn btn-theme" @onclick="AddAuthor">Add Author</button>
@@ -85,12 +86,31 @@
                             <InputCheckbox @bind-Value="newCourse.IsBestSeller" />
                         </div>
                     </div>
-                    <div class="metadata-checkbox">
-                        <label for="categories">Categories:</label>
-                        <InputText class="input" @bind-Value="newCategory" />
-                        <button type="button" class="Mybtn btn-theme" @onclick="AddCategory">Add</button>
-                    </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="create-category">
+            <div class="metadata-checkbox">
+                <label for="categories">Categories:</label>
+                <div class="metadata-checkbox-child">
+                    <InputText class="input" @bind-Value="newCategory" />
+                    <button type="button" class="Mybtn btn-theme" @onclick="AddCategory">Add</button>
+                </div>
+            </div>
+            <div class="categories-container">
+                @if (newCourse.Categories != null)
+                {
+                    <div class="categories">
+                        @foreach (var category in newCourse.Categories)
+                        {
+                            <div class="each-category">
+                                <span>@category</span>
+                                <button type="button" class="Mybtn btn-red" @onclick="() => RemoveCategory(category)">Remove</button>
+                            </div>
+                        }
+                    </div>
+                }
             </div>
         </div>
 
@@ -127,6 +147,7 @@
                                     <path d="M8.33249 11.3225L6.41666 9.40999L5.23999 10.59L8.33416 13.6775L13.9225 8.08916L12.7442 6.91083L8.33249 11.3225Z" fill="#6366F1" />
                                 </svg>
                                 <p class="p">@learnItem</p>
+                                <button type="button" class="Mybtn btn-red" @onclick="() => RemoveLearnItem(learnItem)">Remove item</button>
                             </div>
                         </div>
                     }
@@ -152,6 +173,7 @@
                             </svg>
                                 @include
                             </div>
+                            <button type="button" class="Mybtn btn-red" @onclick="() => DeleteInclude(include)">Remove item</button>
                     </div>
                 }
 
@@ -196,6 +218,7 @@
                         <div>
                             <InputText class="input" @bind-Value="programDetail.Title" placeholder="Program Detail Title" />
                             <InputTextArea class="input" @bind-Value="programDetail.Description" placeholder="Program Detail Description" />
+                                <button type="button" class="Mybtn btn-red" @onclick="() => RemoveProgramDetail(programDetail)">Remove detail</button>
                         </div>
                     }
                     <button class="Mybtn btn-theme" type="button" @onclick="AddProgramDetail">Add Program Detail</button>
@@ -471,6 +494,7 @@
                 errorMessage = $"Exception: {ex.Message}";
             }
         }
+        else if(newCourse.Authors == null)
 
         errorMessage = "You must add an author!";
     }
@@ -495,6 +519,7 @@
         newCourse.Content.ProgramDetails.Remove(programDetail);
     }
 
+
     private void AddCategory()
     {
         if (!string.IsNullOrWhiteSpace(newCategory))
@@ -517,6 +542,18 @@
         }
     }
 
+    private void DeleteInclude(string include)
+    {
+        if (!string.IsNullOrWhiteSpace(include))
+        {
+            var includes = newCourse?.Content?.Includes?.ToList();
+            includes.Remove(include);
+            newCourse.Content.Includes = includes.ToArray();
+            newInclude = string.Empty;
+        }
+    }
+
+
     private void AddLearning()
     {
         if (!string.IsNullOrWhiteSpace(newLearning))
@@ -525,6 +562,28 @@
             learning.Add(newLearning);
             newCourse.Content.Learning = learning.ToArray();
             newLearning = string.Empty;
+        }
+    }
+
+    private void RemoveLearnItem(string learnItem)
+    {
+        if (!string.IsNullOrWhiteSpace(learnItem))
+        {
+            var learning = newCourse?.Content?.Learning?.ToList();
+            learning.Remove(learnItem);
+            newCourse.Content.Learning = learning.ToArray();
+            newLearning = string.Empty;
+        }
+    }
+
+    private void RemoveCategory(string category)
+    {
+        if (!string.IsNullOrWhiteSpace(category))
+        {
+            var learning = newCourse?.Categories.ToList();
+            learning.Remove(category);
+            newCourse.Categories = learning.ToArray();
+            newCategory = string.Empty;
         }
     }
 }
