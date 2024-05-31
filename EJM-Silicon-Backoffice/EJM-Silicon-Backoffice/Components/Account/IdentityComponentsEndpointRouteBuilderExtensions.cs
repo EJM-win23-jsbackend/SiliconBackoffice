@@ -46,7 +46,17 @@ namespace Microsoft.AspNetCore.Routing
                 [FromForm] string returnUrl) =>
             {
                 await signInManager.SignOutAsync();
-                return TypedResults.LocalRedirect($"~/{returnUrl}");
+
+                if(Uri.IsWellFormedUriString(returnUrl, UriKind.Absolute))
+                {
+                    return TypedResults.Redirect(returnUrl);
+                }
+                else
+                {
+                    return TypedResults.Redirect("https://win23jsbackend-ejm.azurewebsites.net/");
+                }
+                //edit here to set redirection to webapp home page
+                //return TypedResults.LocalRedirect($"~/{returnUrl}");
             });
 
             var manageGroup = accountGroup.MapGroup("/Manage").RequireAuthorization();

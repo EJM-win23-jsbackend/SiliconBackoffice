@@ -1,20 +1,48 @@
 ﻿@page "/"
 
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
 <PageTitle>Home</PageTitle>
 
 <section>
     <div class="AdminChoises">
-        <h1>Admin</h1>
-        <a class="a" href="/courses"><h6 class="h6">Handle Courses</h6></a>
-        <a class="a" href="/subscribers"><h6 class="h6">Handle Subscribers</h6></a>
-        <a class="a" href="/users"><h6 class="h6">Handle Users</h6></a>
-        <a class="a" href="/admins"><h6 class="h6">Handle Admin</h6></a>
 
-@*                             <NotAuthorized>
-                        <div>
-                            <h1>Your unauthorized...</h1>
-                        </div>
-                    </NotAuthorized> *@
 
+        <AuthorizeView Roles="Admin">
+            <h1>Admin</h1>
+            <a class="a" href="/courses"><h6 class="h6">Handle Courses</h6></a>
+            <a class="a" href="/subscribers"><h6 class="h6">Handle Subscribers</h6></a>
+            <a class="a" href="/users"><h6 class="h6">Handle Users</h6></a>
+            <a class="a" href="/admins"><h6 class="h6">Handle Admin</h6></a>
+        </AuthorizeView>
+
+        @if (messageVisible)
+            @if (isUser)
+            {
+                <h1>Backoffice</h1>
+                <p>You need to sign in to access this page.</p>
+            }
+  
     </div>
 </section>
+ @code{
+    private bool messageVisible = true;
+    private bool isUser = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            isUser = user.IsInRole("User");
+        }
+    }
+
+    private void ShowMessage()
+    {
+        messageVisible = !messageVisible;
+    }
+ }
+@* ändrat i den här *@
