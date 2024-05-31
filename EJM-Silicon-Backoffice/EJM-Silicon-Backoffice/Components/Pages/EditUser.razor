@@ -71,6 +71,11 @@
                     <label for="Password">Reset password</label>
                     <InputText class="input" type="password" @bind-Value="@UserAccountForm.NewPassword" placeholder="Enter a new password" />
                 </div>
+                <div>
+                    <label>
+                        <InputCheckbox @bind-Value="setAdmin"/> Set Role: Admin
+                    </label>
+                </div>
             </div>
         </div>
         <div class="menu-buttons">
@@ -84,8 +89,10 @@
     private string? StatusMessage { get; set; }
     private bool messageVisible = false;
     private bool isAdmin = false;
+    public bool setAdmin { get; set; }
 
     private ApplicationUser users = new();
+    private ApplicationUser user { get; set; }
 
     [SupplyParameterFromForm]
     private UserAccountModel UserAccountForm { get; set; } = new UserAccountModel();
@@ -113,6 +120,7 @@
         messageVisible = !messageVisible;
     }
 
+
     private async Task SaveUserChanges()
     {
         try
@@ -124,30 +132,21 @@
 
             if (response.IsSuccessStatusCode)
             {
+
+                var user = await UserManager.FindByIdAsync(userId);
+                if(user != null)
+                {
+                    if (setAdmin)
+                    {
+                        await UserManager.AddToRoleAsync(user, "Admin");
+                    }
+                    else
+                    {
+                        await UserManager.RemoveFromRoleAsync(user, "Admin");
+                    }
+                }
+
                 StatusMessage = "User updated successfully";
-
-                // if(!string.IsNullOrEmpty(UserAccountForm.NewPassword))
-                // {
-                //     var user = await UserManager.FindByIdAsync(userId);
-                //     if(user == null)
-                //     {
-                //         StatusMessage = "User was not found";
-                //     }
-                //     else
-                //     {
-                //         var token = await UserManager.GeneratePasswordResetTokenAsync(user);
-                //         var resetPassword = await UserManager.ResetPasswordAsync(user, token, UserAccountForm.NewPassword);
-
-                //         if (resetPassword.Succeeded)
-                //         {
-                //             StatusMessage = "Password changed successfully";
-                //         }
-                //         else
-                //         {
-                //             StatusMessage = "Couldn´t change the password. Please try again";
-                //         }
-                //     }  
-                // } 
             }
             else
             {

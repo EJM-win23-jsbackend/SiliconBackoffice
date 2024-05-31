@@ -46,5 +46,9 @@
   {
     "outputFile": "Components/Pages/EditCourse.razor.css",
     "inputFile": "Components/Pages/EditCourse.razor.scss"
+  },
+  {
+    "outputFile": "Components/Account/Pages/Login.razor.css",
+    "inputFile": "Components/Account/Pages/Login.razor.scss"
   }
 ]
