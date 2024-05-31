@@ -30,13 +30,13 @@
         else
         {
             @foreach (var item in courses)
-            {
+            {           
                 var link = $"courses/editcourse/{item.Id}";
                 <div class="course-wrapper">
                     <div class="course">
                         <img class="course-image" src="/images/courses/@item.ImageUri" alt="" />
                         <div class="content">
-                            <h2>@item.Title</h2>
+                                <h2><a class="a" href="@($"courses/details/{item.Id}")">@item.Title</a></h2>
                             @if (item.Author != null)
                             {
                                 <p>By @item.Author</p>
